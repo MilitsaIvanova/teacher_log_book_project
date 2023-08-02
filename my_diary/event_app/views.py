@@ -10,14 +10,14 @@ from my_diary.event_app.models import Event
 
 @login_required
 def my_calendar(request):
-    all_events=request.user.event_set.all()
+    all_events=Event.objects.filter(teacher=request.user)
     context={
         'events':all_events,
     }
     return render(request, 'my_calendar.html',context)
 @login_required
 def all_events(request):
-    all_events=Event.objects.all()
+    all_events=Event.objects.filter(teacher=request.user)
     out=[]
     for event in all_events:
         out.append({
