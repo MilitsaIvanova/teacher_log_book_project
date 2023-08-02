@@ -1,0 +1,132 @@
+@import "profile-style.css";
+@import "profile-edit.css";
+@import "dashboard style.css";
+@import "classes_style.css";
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 10px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
+.login-register-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+
+@media only screen and (max-width: 768px) {
+    /* For screens with width up to 768px, modify the flex-direction to stack the content vertically */
+    .login-register-div {
+        flex-direction: column;
+    }
+}
+.image-container {
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+/* Apply a table-like layout to the form */
+.register-form {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+/* Style each row of the "table" */
+.register-form tr {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Style each cell of the "table" */
+.register-form td {
+    display: block;
+    padding: 8px;
+}
+
+/* Add styles for the input fields and buttons */
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.register-form button {
+    width: 100%;
+    padding: 10px 30px;
+    background-color: #3897f0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.register-form button:hover {
+    background-color: #3182d4;
+}
+.form-title{
+    text-align: center;
+}
+.image-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.second-option {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+}

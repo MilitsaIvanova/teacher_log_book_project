@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    Task create page
+    {% load custom_filters %}
+    <form method="post" action="{% url 'task details' pk=task.pk %}">
+        {% csrf_token %}
+        <div class="container">
+            <div class="main-body">
+
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="main-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'dashboard' pk=user.pk %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Task details</li>
+                    </ol>
+                </nav>
+                <!-- /Breadcrumb -->
+
+                <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+
+
+                                    <img src="https://cdn-icons-png.flaticon.com/512/906/906334.png" alt="Admin"
+                                         class="rounded-circle" width="150">
+
+                                    <div class="mt-3">
+                                        <!--Student Name-->
+                                        <h4>{{ task.title}}</h4>
+
+
+                                        <button class="btn btn-primary profile-button" ><a href="{% url 'dashboard' pk=request.user.pk %}" style="color: white; text-decoration: None">Back to tasks</a>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Title</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{ task.title }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Description</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{ task.description }}
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
