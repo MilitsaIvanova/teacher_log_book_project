@@ -2,12 +2,17 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as views
-from my_diary.account_app.forms import DiaryUserCreateForm,LoginForm,ProfileEditForm,AddStudentForm,EditStudentForm
-from my_diary.account_app.models import DiaryUser,Student
+from my_diary.account_app.forms import DiaryUserCreateForm, LoginForm, ProfileEditForm, AddStudentForm, EditStudentForm, \
+    EditGroupForm, GroupCreateForm
+from my_diary.account_app.models import DiaryUser, Student, Group
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+
+from my_diary.core.access_mixin import GroupRequiredMixin
+from my_diary.event_app.views import event_counter
+
 
 class UserRegisterView(views.CreateView):
     model = DiaryUser
@@ -69,14 +74,22 @@ class ClassDetails(views.DetailView):
         context=super().get_context_data(**kwargs)
         context['students']=self.request.user.student_set.all()
         return context
-
+class GroupDetails(views.DetailView):
+    template_name = 'groups.html'
+    model = DiaryUser
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['groups']=self.request.user.group_set.all()
+        return context
 
 class ProfileDetails(views.DetailView):
     template_name = 'my_profile.html'
     model = DiaryUser
+
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['students_count']=self.request.user.student_set.count()
+        context['event_count'] =event_counter(request=self.request)
         return context
 @login_required
 def add_student(request):
@@ -92,7 +105,7 @@ def add_student(request):
 
     return render(request,'add_student.html',context)
 
-class EditStudent(views.UpdateView):
+class EditStudent(LoginRequiredMixin,views.UpdateView):
     template_name = 'edit_student.html'
     model = Student
     form_class = EditStudentForm
@@ -101,3 +114,72 @@ class EditStudent(views.UpdateView):
         return reverse_lazy('classes',kwargs={
             'pk':self.request.user.pk
         })
+class CreateGroup(LoginRequiredMixin,views.CreateView):
+    template_name = 'create_group.html'
+    model = Group
+    form_class = GroupCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateGroup, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+    def form_valid(self, form):
+        form.instance.teacher = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('groups', kwargs={
+            'pk': self.request.user.pk
+        })
+class EditGroup(LoginRequiredMixin,views.UpdateView):
+    template_name = 'edit_group.html'
+    model = Group
+    form_class = EditGroupForm
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        group = Group.objects.get(pk=self.kwargs['pk'])
+        context['group']=group
+        if group.students:
+            context['students_in_group'] = group.students.all()
+        else:
+            context['students_in_group']=None
+        return context
+    def get_form_kwargs(self):
+        kwargs = super(EditGroup, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+    def get_success_url(self):
+        return reverse_lazy('groups',kwargs={
+            'pk':self.request.user.pk
+        })
+
+class GroupDeleteView(views.DeleteView):
+    model = Group
+    template_name = 'delete_group.html'
+
+    def get_success_url(self):
+        return reverse_lazy('groups',kwargs={
+            'pk':self.request.user.pk
+        })
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+class DeleteStudentView(views.DeleteView):
+    model = Student
+    template_name = 'delete_student.html'
+
+    def get_success_url(self):
+        return reverse_lazy('classes',kwargs={
+            'pk':self.request.user.pk
+        })
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)

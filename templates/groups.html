@@ -11,7 +11,7 @@
             <div class="col-lg-12">
                 <div class="section-title text-center">
                     <div class="title-text">
-                        <h2>My Students</h2>
+                        <h2>My Groups</h2>
                     </div>
 
                 </div>
@@ -48,34 +48,34 @@
                                         <th class="text-center" scope="col"></th>
                                     </tr>
                                 </thead>
-{#                        List of students starts#}
-                                {% for student in students %}
+{#                        List of groups starts#}
+                                {% for group in groups %}
                                 <tbody>
                                     <tr class="inner-box">
 
                                         <td>
                                             <div class="event-img">
-                                                <img src="https://static.vecteezy.com/system/resources/previews/000/511/962/original/vector-student-glyph-black-icon.jpg" alt="" />
+                                                <img src="https://cdn1.iconfinder.com/data/icons/school-and-education-69/32/student_group-512.png" alt="" />
                                             </div>
                                         </td>
 
                                         <td>
 
                                             <div class="event-wrap">
-                                                <h3><a href="{% url 'edit student' pk=student.pk %}">{{ student.name}}</a></h3>
+                                                <h3><a href="">{{ group.name}}</a></h3>
                                                 <div class="meta">
                                                     <div class="organizers">
-                                                        <a href="{% url 'profile' pk=user.pk %}">{{ student.teacher.first_name}} {{ student.teacher.last_name}}</a>
+                                                        <a href="{% url 'profile' pk=user.pk %}">{{ group.teacher.first_name}} {{ group.teacher.last_name}}</a>
                                                     </div>
                                                     <div class="categories">
                                                         <a href="#">Files for this lesson</a>
                                                     </div>
                                                     <div class="time">
 
-                                                        {% if student.lesson_time %}
-                                                        <span>{{ student.lesson_time}}</span>
+                                                        {% if group.lesson_time %}
+                                                        <span>{{ group.lesson_time}}</span>
                                                         {% else %}
-                                                        <span>No information about the usual time of the lesson</span>
+                                                        <span>No information about the time of the event</span>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -83,8 +83,8 @@
                                         </td>
                                         <td>
                                             <div class="r-no">
-                                                {% if student.place %}
-                                                <span>{{ student.place}}</span>
+                                                {% if group.place %}
+                                                <span>{{ group.place}}</span>
                                                 {% else %}
                                                 <span>No information about the place of the event</span>
                                                 {% endif %}
@@ -92,8 +92,7 @@
                                         </td>
                                         <td>
                                             <div class="primary-btn">
-
-                                                <a class="btn btn-primary" href="{% url 'edit student' pk=student.pk %}">Details and Edit</a>
+                                                <a class="btn btn-primary" href="{% url 'edit group' pk=group.pk %}">Details and Edit</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -1,17 +1,19 @@
 from django.contrib import admin
-from my_diary.account_app.models import Student, Subject, Group, DiaryUser
+from django.contrib.admin import ModelAdmin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
-
-# Register your models here.
-
-
+from my_diary.account_app.models import Student, TeachersSubject, Group, DiaryUser
+@admin.register(DiaryUser)
+class DiaryUserAdmin(admin.ModelAdmin):
+    filter_horizontal = ('groups', 'user_permissions',)
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Subject)
+@admin.register(TeachersSubject)
 class SubjectAdmin(admin.ModelAdmin):
     pass
 
@@ -21,6 +23,4 @@ class GroupAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(DiaryUser)
-class DiaryUserAdmin(admin.ModelAdmin):
-    pass
+

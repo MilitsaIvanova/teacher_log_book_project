@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load custom_filters %}
-<form method="post">
+<form method="post" action="{% url 'create group' %}">
 {% csrf_token %}
     <div class="container">
     <div class="main-body">
@@ -10,8 +10,8 @@
           <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'classes' pk=user.pk %}">My classes</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit student information</li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'groups' pk=user.pk %}">My groups</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create group</li>
             </ol>
           </nav>
           <!-- /Breadcrumb -->
@@ -23,15 +23,14 @@
                   <div class="d-flex flex-column align-items-center text-center">
 
 
-                  <img src="https://static.vecteezy.com/system/resources/previews/000/511/962/original/vector-student-glyph-black-icon.jpg" alt="Admin" class="rounded-circle" width="150">
+                  <img src="https://cdn1.iconfinder.com/data/icons/school-and-education-69/32/student_group-512.png" alt="Admin" class="rounded-circle" width="150">
 
                     <div class="mt-3">
-                        <!--Student Name-->
-                      <h4>Student</h4>
+                        <!--Group Name-->
+                      <h4>New Group</h4>
 
 
-                      <button class="btn btn-primary profile-button" type="submit">Save changes</button>
-                        <a class="btn btn-primary" style="background-color: darkred; border-color: darkred" href='{% url 'delete student' pk=student.pk%}'>Delete Student</a>
+                      <button class="btn btn-primary profile-button" type="submit">Create Group</button>
 
                     </div>
                   </div>
@@ -46,7 +45,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Full Name</h6>
+                      <h6 class="mb-0">Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">{{ form.name.errors }}
                         {{form.name|custom_class:'form-control'}}
@@ -55,21 +54,21 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Email</h6>
+                      <h6 class="mb-0">Year</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">{{ form.email.errors }}
-                        {{ form.email|custom_class:'form-control'}}
+                    <div class="col-sm-9 text-secondary">{{ form.year.errors }}
+                        {{ form.year|custom_class:'form-control'}}
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
 
-                      <h6 class="mb-0">Phone</h6>
+                      <h6 class="mb-0">Students</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">{{ form.contact_number.errors }}
+                    <div class="col-sm-9 text-secondary">{{ form.students.errors }}
 
-                        {{form.contact_number|custom_class:'form-control'}}
+                        {{form.students}}
 
 
                     </div>
@@ -94,18 +93,7 @@
                         {{form.lesson_time|custom_class:'form-control'}}
                     </div>
                   </div>
-                <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
 
-                      <h6 class="mb-0">Additional information</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                        {{ form.more_information.errors}}
-                    {{ form.more_information|custom_class:'form-control' }}
-
-                    </div>
-                  </div>
                 </div>
               </div>
 

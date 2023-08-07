@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-    Task create page
     {% load custom_filters %}
     <form method="post" action="{% url 'task details' pk=task.pk %}">
         {% csrf_token %}

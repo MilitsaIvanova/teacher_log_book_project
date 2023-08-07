@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -5,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from my_diary.account_app.models import Student
-from my_diary.event_app.forms import EditEventForm
+from my_diary.event_app.forms import EditEventForm, CreateEventForm
 from my_diary.event_app.models import Event
 
 @login_required
@@ -27,17 +29,9 @@ def all_events(request):
             'end':event.end.strftime("%m/%d/%Y, %H:%M:%S"),
         })
     return JsonResponse(out,safe=False)
-# @login_required
-# def add_event(request):
-#     start=request.GET.get("start",None)
-#     end=request.GET.get("end",None)
-#     title=request.GET.get("title",None)
-#     event=Event(name=str(title),start=start,end=end)
-#     event.save()
-#     data={}
-#     return JsonResponse(data)
+
 class EventCreateView(CreateView):
-    fields = ['name','start','end']
+    form_class = CreateEventForm
     model = Event
     template_name = 'add_event.html'
 
@@ -99,3 +93,15 @@ def remove(request):
     event.delete()
     data={}
     return JsonResponse(data)
+
+def event_counter(request):
+    today = datetime.now().date()
+    start_of_week = today - timedelta(days=today.weekday())  # Monday
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday
+
+
+    events_this_week = Event.objects.filter(teacher=request.user,start__range=[start_of_week, end_of_week])
+
+    num_events = events_this_week.count()
+
+    return num_events
