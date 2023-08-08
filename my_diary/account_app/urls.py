@@ -10,7 +10,7 @@ urlpatterns = [
     path('logout/yes/', views.UserLogoutView.as_view(), name="logout"),
     path('classes/<int:pk>', views.ClassDetails.as_view(), name='classes'),
     path('groups/<int:pk>', views.GroupDetails.as_view(), name='groups'),
-    path('group/<int:pk>', views.GroupDeleteView.as_view(),name='group delete'),
+    path('group/<int:pk>', views.GroupDeleteView.as_view(), name='group delete'),
     path('edit_group/<int:pk>', views.EditGroup.as_view(), name='edit group'),
     path('logout/', views.logout_confirm, name='logout confirm'),
     path('profile/', include([
@@ -20,6 +20,9 @@ urlpatterns = [
     ])),
     path('add_student/', views.add_student, name='add student'),
     path('edit_student/<int:pk>', views.EditStudent.as_view(), name='edit student'),
-path('delete_student/<int:pk>', views.DeleteStudentView.as_view(), name='delete student'),
-path('create_group/', views.CreateGroup.as_view(), name='create group'),
+    path('delete_student/<int:pk>', views.DeleteStudentView.as_view(), name='delete student'),
+    path('create_group/', views.CreateGroup.as_view(), name='create group'),
+    path('create_subject/', views.CreateSubject.as_view(), name='create subject'),
+    path('edit_subject/<int:pk>', views.EditSubject.as_view(), name='edit subject'),
+    path('delete_subject/<int:pk>', views.DeleteSubject.as_view(), name='delete subject'),
 ]

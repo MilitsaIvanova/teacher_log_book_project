@@ -68,7 +68,11 @@
                                                         <a href="{% url 'profile' pk=user.pk %}">{{ student.teacher.first_name}} {{ student.teacher.last_name}}</a>
                                                     </div>
                                                     <div class="categories">
-                                                        <a href="#">Files for this lesson</a>
+                                                        {% if student.subject %}
+                                                        <a href="{% url 'edit subject' pk=student.subject.pk %}">Subject: {{ student.subject }}</a>
+                                                        {% else %}
+                                                            <a href="{% url 'create subject' %}">Subject: No subject selected</a>
+                                                        {% endif %}
                                                     </div>
                                                     <div class="time">
 

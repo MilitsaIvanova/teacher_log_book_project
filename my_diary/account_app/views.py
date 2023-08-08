@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic as views
 from my_diary.account_app.forms import DiaryUserCreateForm, LoginForm, ProfileEditForm, AddStudentForm, EditStudentForm, \
     EditGroupForm, GroupCreateForm
-from my_diary.account_app.models import DiaryUser, Student, Group
+from my_diary.account_app.models import DiaryUser, Student, Group, TeachersSubject
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,7 +23,10 @@ class UserRegisterView(views.CreateView):
 class UserLoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'login-page.html'
-    next_page = reverse_lazy('index')
+    def get_success_url(self):
+        return reverse_lazy('dashboard', kwargs={
+            'pk': self.request.user.pk
+        })
 
     def form_invalid(self, form):
         messages.error(self.request, 'Invalid login credentials. Please try again.')
@@ -73,6 +76,7 @@ class ClassDetails(views.DetailView):
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['students']=self.request.user.student_set.all()
+
         return context
 class GroupDetails(views.DetailView):
     template_name = 'groups.html'
@@ -90,17 +94,20 @@ class ProfileDetails(views.DetailView):
         context=super().get_context_data(**kwargs)
         context['students_count']=self.request.user.student_set.count()
         context['event_count'] =event_counter(request=self.request)
+        context['subjects']=TeachersSubject.objects.filter(teacher=self.request.user)
         return context
 @login_required
 def add_student(request):
-    form=AddStudentForm(request.POST or None)
-    if form.is_valid():
-        student=form.save(commit=False)
-        student.user=request.user
-        student.teacher_id=student.user.id
-        student.save()
-        redirect_link='/classes/'+str(request.user.pk)
-        return redirect(redirect_link)
+    if request.method=="POST":
+        form=AddStudentForm(request.POST,user=request.user)
+        if form.is_valid():
+            student=form.save(commit=False)
+            student.user=request.user
+            student.teacher_id=student.user.id
+            student.save()
+            redirect_link='/classes/'+str(request.user.pk)
+            return redirect(redirect_link)
+    form=AddStudentForm(user=request.user)
     context={'form':form}
 
     return render(request,'add_student.html',context)
@@ -183,3 +190,42 @@ class DeleteStudentView(views.DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         return HttpResponseRedirect(success_url)
+
+class CreateSubject(views.CreateView):
+    model = TeachersSubject
+    template_name = 'create_subject.html'
+    fields = ['name','code','description']
+    def form_valid(self, form):
+        form.instance.teacher = self.request.user
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('classes', kwargs={
+            'pk': self.request.user.pk
+        })
+
+class EditSubject(views.UpdateView):
+    model = TeachersSubject
+    template_name = 'edit_subject.html'
+    fields = ['name','code','description']
+    def get_success_url(self):
+        return reverse_lazy('classes', kwargs={
+            'pk': self.request.user.pk
+        })
+
+class DeleteSubject(views.DeleteView):
+    model = TeachersSubject
+    template_name = 'delete_subject.html'
+
+    def get_success_url(self):
+        return reverse_lazy('classes',kwargs={
+            'pk':self.request.user.pk
+        })
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+
+

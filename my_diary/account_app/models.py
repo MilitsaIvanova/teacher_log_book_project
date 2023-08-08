@@ -21,6 +21,8 @@ class TeachersSubject(models.Model):
     code = models.CharField(max_length=10, unique=True)
     description = models.TextField()
     teacher=models.ForeignKey(to=DiaryUser,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 class Student(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField()
@@ -29,6 +31,7 @@ class Student(models.Model):
     place=models.CharField(max_length=50,null=True,blank=True)
     lesson_time=models.TimeField(null=True,blank=True)
     more_information=models.TextField(max_length=500, blank=True,null=True)
+    subject=models.ForeignKey(to=TeachersSubject,on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -42,3 +45,4 @@ class Group(models.Model):
     students = models.ManyToManyField(Student, related_name="groups",blank=True)
     place=models.CharField(max_length=50,null=True,blank=True)
     lesson_time=models.TimeField(null=True,blank=True)
+    subject = models.ForeignKey(to=TeachersSubject, on_delete=models.SET_NULL,null=True)
