@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from itertools import chain
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -31,7 +32,7 @@ def all_events(request):
         })
     return JsonResponse(out,safe=False)
 
-class EventCreateView(CreateView):
+class EventCreateView(LoginRequiredMixin,CreateView):
     form_class = CreateEventForm
     model = Event
     template_name = 'events/add_event.html'
@@ -48,7 +49,7 @@ class EventCreateView(CreateView):
         return reverse_lazy('calendar')
 
 
-class EventEditView(UpdateView):
+class EventEditView(LoginRequiredMixin,UpdateView):
     template_name = 'events/update_event.html'
     model = Event
     form_class = EditEventForm
@@ -60,7 +61,7 @@ class EventEditView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('calendar')
-class EventDelete(DeleteView):
+class EventDelete(LoginRequiredMixin,DeleteView):
     template_name = 'events/delete_event.html'
     model = Event
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import request, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -9,7 +10,7 @@ from my_diary.to_do_list_app import models
 
 
 # Create your views here.
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin,CreateView):
     fields = ['title', 'description']
     model = models.Task
     template_name = 'tasks/create_task.html'
@@ -22,7 +23,7 @@ class TaskCreateView(CreateView):
         return redirect('/dashboard/'+str(self.request.user.pk))
 
 
-class TaskList(DetailView):
+class TaskList(LoginRequiredMixin,DetailView):
     template_name = 'dashboard.html'
     model = DiaryUser
 
@@ -32,7 +33,7 @@ class TaskList(DetailView):
         return context
 
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Task
     template_name = 'tasks/task_delete_confirmation.html'
 
@@ -42,7 +43,7 @@ class TaskDeleteView(DeleteView):
         })
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(LoginRequiredMixin,DetailView):
     model = models.Task
     template_name = 'tasks/task_detail.html'
 

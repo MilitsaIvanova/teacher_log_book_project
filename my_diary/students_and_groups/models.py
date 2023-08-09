@@ -1,13 +1,20 @@
+from django.core import  exceptions
 from django.db import models
 
 from my_diary.account_app.models import DiaryUser, TeachersSubject
 
 
 # Create your models here.
+def validate_phone_number(value):
+    for ch in value:
+        if not ch.isnumeric():
+            raise exceptions.ValidationError('The phone number field should contain only numbers')
 class Student(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField()
-    contact_number = models.CharField(max_length=10, blank=True, null=True)
+    contact_number = models.CharField(max_length=10, blank=True, null=True,validators=(
+        validate_phone_number,
+    ))
     teacher=models.ForeignKey(to=DiaryUser,on_delete=models.CASCADE)
     place=models.CharField(max_length=50,null=True,blank=True)
     lesson_time=models.TimeField(null=True,blank=True)

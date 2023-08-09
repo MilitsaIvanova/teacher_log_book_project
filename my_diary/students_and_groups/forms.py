@@ -51,6 +51,9 @@ class GroupCreateForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ('name', 'year', 'students','place','lesson_time','subject')
+        widgets = {
+            'lesson_time': TimeInput(attrs={'type': 'time'}),
+        }
         exclude = ('teacher',)
 
     def __init__(self, *args, **kwargs):

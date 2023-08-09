@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -28,7 +29,7 @@ class UserLoginView(auth_views.LoginView):
         messages.error(self.request, 'Invalid login credentials. Please try again.')
         return super().form_invalid(form)
 
-class UserLogoutView(auth_views.LogoutView):
+class UserLogoutView(LoginRequiredMixin,auth_views.LogoutView):
     next_page = reverse_lazy('index')
 
 @login_required
@@ -46,7 +47,15 @@ class ProfileEditView(LoginRequiredMixin,views.UpdateView):
         return reverse_lazy('profile',kwargs={
             'pk':self.object.pk
         })
-class UserDeleteView(views.DeleteView):
+
+    def form_valid(self, form):
+        try:
+            return super().form_valid(form)
+        except ValidationError as e:
+            error_message = str(e)
+            context = self.get_context_data(form=form, error_message=error_message)
+            return self.render_to_response(context)
+class UserDeleteView(LoginRequiredMixin,views.DeleteView):
     model = DiaryUser
     template_name = 'profile/delete_profile.html'
 
@@ -66,7 +75,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-class ProfileDetails(views.DetailView):
+class ProfileDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'profile/my_profile.html'
     model = DiaryUser
 
@@ -77,7 +86,7 @@ class ProfileDetails(views.DetailView):
         context['subjects']=TeachersSubject.objects.filter(teacher=self.request.user)
         return context
 
-class CreateSubject(views.CreateView):
+class CreateSubject(LoginRequiredMixin,views.CreateView):
     model = TeachersSubject
     template_name = 'subject/create_subject.html'
     fields = ['name','code','description']
@@ -89,7 +98,7 @@ class CreateSubject(views.CreateView):
             'pk': self.request.user.pk
         })
 
-class EditSubject(views.UpdateView):
+class EditSubject(LoginRequiredMixin,views.UpdateView):
     model = TeachersSubject
     template_name = 'subject/edit_subject.html'
     fields = ['name','code','description']
@@ -98,7 +107,7 @@ class EditSubject(views.UpdateView):
             'pk': self.request.user.pk
         })
 
-class DeleteSubject(views.DeleteView):
+class DeleteSubject(LoginRequiredMixin,views.DeleteView):
     model = TeachersSubject
     template_name = 'subject/delete_subject.html'
 

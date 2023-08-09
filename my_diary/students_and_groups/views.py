@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic as views
@@ -10,7 +11,7 @@ from my_diary.students_and_groups.forms import AddStudentForm, EditStudentForm, 
 from my_diary.students_and_groups.models import Student, Group
 
 
-class ClassDetails(views.DetailView):
+class ClassDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'students and groups/my_classes.html'
     model = DiaryUser
     def get_context_data(self, **kwargs):
@@ -19,7 +20,7 @@ class ClassDetails(views.DetailView):
 
         return context
 
-class GroupDetails(views.DetailView):
+class GroupDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'students and groups/groups.html'
     model = DiaryUser
     def get_context_data(self, **kwargs):
@@ -36,16 +37,22 @@ def add_student(request):
     subjects_exist=TeachersSubject.objects.filter(teacher=request.user).exists()
     if request.method=="POST":
         form=AddStudentForm(request.POST,user=request.user)
-        if form.is_valid():
-            student=form.save(commit=False)
-            student.user=request.user
-            student.teacher_id=student.user.id
-            student.save()
-            redirect_link='/classes/'+str(request.user.pk)
-            return redirect(redirect_link)
-    form=AddStudentForm(user=request.user)
-    context={'form':form, 'subjects_exist': subjects_exist}
+        try:
+            if form.is_valid():
+                student = form.save(commit=False)
+                student.user = request.user
+                student.teacher_id = student.user.id
+                student.save()
+                redirect_link = '/classes/' + str(request.user.pk)
+                return redirect(redirect_link)
+        except ValidationError as e:
 
+            form.add_error(None, e)
+
+    else:
+        form = AddStudentForm(user=request.user)
+
+    context = {'form': form, 'subjects_exist': subjects_exist}
     return render(request, 'students and groups/add_student.html', context)
 
 class EditStudent(LoginRequiredMixin,views.UpdateView):
@@ -123,7 +130,7 @@ class EditGroup(LoginRequiredMixin,views.UpdateView):
         return reverse_lazy('groups',kwargs={
             'pk':self.request.user.pk
         })
-class GroupDeleteView(views.DeleteView):
+class GroupDeleteView(LoginRequiredMixin,views.DeleteView):
     model = Group
     template_name = 'students and groups/delete_group.html'
 
@@ -138,7 +145,7 @@ class GroupDeleteView(views.DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-class DeleteStudentView(views.DeleteView):
+class DeleteStudentView(LoginRequiredMixin,views.DeleteView):
     model = Student
     template_name = 'students and groups/delete_student.html'
 
