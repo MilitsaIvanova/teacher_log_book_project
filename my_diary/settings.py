@@ -27,7 +27,12 @@ SECRET_KEY = 'django-insecure-viao9cbfgt(kq5ns61u1z1(+*8fbzdhjs%kp9s^f$d!lb)iek*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 
 # Application definition
@@ -41,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'my_diary.event_app',
     'my_diary.account_app',
-    'my_diary.to_do_list_app'
+    'my_diary.to_do_list_app',
+    'my_diary.students_and_groups',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +65,7 @@ ROOT_URLCONF = 'my_diary.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {

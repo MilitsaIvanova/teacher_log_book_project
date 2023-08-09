@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load custom_filters %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="container">
+            <div class="main-body">
+
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="main-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'groups' pk=user.pk %}">My
+                            groups</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit group information</li>
+                    </ol>
+                </nav>
+                <!-- /Breadcrumb -->
+
+                <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+
+
+                                    <img src="https://cdn1.iconfinder.com/data/icons/school-and-education-69/32/student_group-512.png"
+                                         alt="Admin" class="rounded-circle" width="150">
+
+                                    <div class="mt-3">
+                                        <!--Group Name-->
+                                        <h4>{{ group.name }}</h4>
+
+
+                                        <button class="btn btn-primary profile-button" type="submit">Save changes
+                                        </button>
+                                        <a class="btn btn-primary"
+                                           style="background-color: darkred; border-color: darkred"
+                                           href='{% url 'group delete' pk=group.pk %}'>Delete Group</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Name</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">{{ form.name.errors }}
+                                        {{ form.name|custom_class:'form-control' }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Year</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">{{ form.year.errors }}
+                                        {{ form.year|custom_class:'form-control' }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Subject</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {% if not subjects_exist %}
+                                             <div class="alert alert-danger">
+                                            Note: There needs to be at least one created subject.
+                                             <a href="{% url 'create subject' %}">Create one here</a>
+
+                                        </div>
+                                         {% endif %}
+                                        {{ form.subject.errors }}
+                                        {{ form.subject|custom_class:'form-control' }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        <h6 class="mb-0">Students in the group:</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {% if students_in_group %}
+                                            {% for student in students_in_group %}
+                                                <li>{{ student.name }}</li>
+
+                                            {% endfor %}
+                                        {% else %}
+                                            There are currently no students in this group
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        <h6 class="mb-0">Change the students in the group:</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {% if not students_exist %}
+                                             <div class="alert alert-danger">
+                                            Note: There needs to be at least one created student before editing the group.
+                                             <a href="{% url 'add student' %}">Create one here</a>
+
+                                        </div>
+                                         {% endif %}
+                                        {{ form.students.errors }}
+                                        {{ form.students }}
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        <h6 class="mb-0">Place</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">{{ form.place.errors }}
+                                        {{ form.place|custom_class:'form-control' }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        <h6 class="mb-0">Lesson time</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">{{ form.lesson_time.errors }}
+                                        {{ form.lesson_time|custom_class:'form-control' }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
+<!-- footer -->

@@ -3,7 +3,7 @@
     {% load static %}
 
     {% load custom_filters %}
-    <form method="post" action="{% url 'edit subject' pk=object.pk %}">
+    <form method="post" action="{% url 'add_event' %}">
         {% csrf_token %}
         <div class="container">
             <div class="main-body">
@@ -12,7 +12,9 @@
                 <nav aria-label="breadcrumb" class="main-breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit subject</li>
+                        <li class="breadcrumb-item active" aria-current="page"><a
+                                href="{% url 'calendar' %}">Calendar</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add a new event</li>
                     </ol>
                 </nav>
                 <!-- /Breadcrumb -->
@@ -29,12 +31,11 @@
 
                                     <div class="mt-3">
                                         <!--Student Name-->
-                                        <h4>Edit Subject</h4>
+                                        <h4>New Event</h4>
 
 
-                                        <button class="btn btn-primary profile-button" type="submit">Save changes
+                                        <button class="btn btn-primary profile-button" type="submit">Save event
                                         </button>
-                                         <a class="btn btn-primary" style="background-color: darkred; border-color: darkred" href='{% url 'delete subject' pk=object.pk%}'>Delete Subject</a>
 
                                     </div>
                                 </div>
@@ -58,24 +59,36 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Code</h6>
+                                        <h6 class="mb-0">Start Date</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{ form.code.errors }}
-                                        {{ form.code }}
+                                        {{ form.start.errors }}
+                                        {{ form.start }}
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Description</h6>
+                                        <h6 class="mb-0">End Date</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{ form.description.errors }}
-                                        {{ form.description }}
+                                        {{ form.end.errors }}
+                                        {{ form.end }}
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Choose a student or a group:</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{ form.lesson_with.errors }}
+                                       {{ form.lesson_with|custom_class:'form-control' }}
 
+                                        {{ form.lesson_with_group.errors }}
+                                    {{ form.lesson_with_group|custom_class:'form-control' }}
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

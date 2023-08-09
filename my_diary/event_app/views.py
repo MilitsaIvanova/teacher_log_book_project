@@ -1,12 +1,13 @@
 from datetime import datetime, timedelta
+from itertools import chain
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 
-from my_diary.account_app.models import Student
+from my_diary.students_and_groups.models import Student, Group
 from my_diary.event_app.forms import EditEventForm, CreateEventForm
 from my_diary.event_app.models import Event
 
@@ -16,7 +17,7 @@ def my_calendar(request):
     context={
         'events':all_events,
     }
-    return render(request, 'my_calendar.html',context)
+    return render(request, 'events/my_calendar.html', context)
 @login_required
 def all_events(request):
     all_events=Event.objects.filter(teacher=request.user)
@@ -33,59 +34,38 @@ def all_events(request):
 class EventCreateView(CreateView):
     form_class = CreateEventForm
     model = Event
-    template_name = 'add_event.html'
+    template_name = 'events/add_event.html'
 
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-
-        teacher_students=Student.objects.filter(teacher=self.request.user.id)
-        context['students']=teacher_students
-        return context
-
-
+    def get_form_kwargs(self):
+        kwargs = super(EventCreateView,self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
     def form_valid(self, form):
-        event=form.save(commit=False)
-        event.user=self.request.user
-        event.teacher_id=self.request.user.id
-        select_student_id=self.request.POST.get('student')
-        event.lesson_with_id=select_student_id
-        event.save()
-        return redirect('/calendar/')
+        form.instance.teacher_id = self.request.user.id
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('calendar')
 
 
 class EventEditView(UpdateView):
-    template_name = 'update_event.html'
+    template_name = 'events/update_event.html'
     model = Event
     form_class = EditEventForm
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        current_student=self.object.lesson_with
-        teacher_students=Student.objects.filter(teacher=self.request.user.id)
-        context['students']=teacher_students
-        context['current_student_name']=current_student.name
-        return context
 
-    def form_valid(self, form):
-        event = form.save(commit=False)
-        event.user = self.request.user
-        event.teacher_id = self.request.user.id
-        select_student_id = self.request.POST.get('student')
-        event.lesson_with_id = select_student_id
-        event.save()
-        return redirect('/calendar/')
-# @login_required
-# def update(request):
-#     start=request.GET.get('start',None)
-#     end = request.GET.get("end", None)
-#     title = request.GET.get("title", None)
-#     id=request.GET.get('id',None)
-#     event=Event.objects.get(id=id)
-#     event.start=start
-#     event.end=end
-#     event.name=title
-#     event.save()
-#     data={}
-#     return JsonResponse(data)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse_lazy('calendar')
+class EventDelete(DeleteView):
+    template_name = 'events/delete_event.html'
+    model = Event
+
+    def get_success_url(self):
+        return reverse_lazy('calendar')
 @login_required
 def remove(request):
     id=request.GET.get('id',None)

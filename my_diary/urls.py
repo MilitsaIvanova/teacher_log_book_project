@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('my_diary.event_app.urls')),
     path('', include('my_diary.account_app.urls')),
     path('',include('my_diary.to_do_list_app.urls')),
+    path('',include('my_diary.students_and_groups.urls')),
 ]

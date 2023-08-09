@@ -12,7 +12,7 @@ from my_diary.to_do_list_app import models
 class TaskCreateView(CreateView):
     fields = ['title', 'description']
     model = models.Task
-    template_name = 'create_task.html'
+    template_name = 'tasks/create_task.html'
 
     def form_valid(self, form):
         task = form.save(commit=False)
@@ -34,7 +34,7 @@ class TaskList(DetailView):
 
 class TaskDeleteView(DeleteView):
     model = models.Task
-    template_name = 'task_delete_confirmation.html'
+    template_name = 'tasks/task_delete_confirmation.html'
 
     def get_success_url(self):
         return reverse_lazy('dashboard', kwargs={
@@ -44,7 +44,7 @@ class TaskDeleteView(DeleteView):
 
 class TaskDetailView(DetailView):
     model = models.Task
-    template_name = 'task_detail.html'
+    template_name = 'tasks/task_detail.html'
 
 
 class ToggleTaskCompletionView(View):

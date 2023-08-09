@@ -23,10 +23,10 @@
             <div class="col-lg-12">
                 <ul class="nav custom-tab" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active show" id="home-taThursday" data-toggle="tab" href="{% url 'classes' pk=diaryuser.pk %}" role="tab" aria-controls="home" aria-selected="true">Individual</a>
+                        <a class="nav-link" id="home-taThursday" data-toggle="tab" href="{% url 'classes' pk=diaryuser.pk %}" role="tab" aria-controls="home" aria-selected="true">Individual</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="{% url 'groups' pk=diaryuser.pk %}" role="tab" aria-controls="profile" aria-selected="false">Groups</a>
+                        <a class="nav-link active show" id="profile-tab" data-toggle="tab" href="{% url 'groups' pk=diaryuser.pk %}" role="tab" aria-controls="profile" aria-selected="false">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="{% url 'add student' %}" role="tab" aria-controls="profile" aria-selected="false">Add a student</a>
@@ -62,7 +62,7 @@
                                         <td>
 
                                             <div class="event-wrap">
-                                                <h3><a href="">{{ group.name}}</a></h3>
+                                                <h3><a href="{% url 'edit group' pk=group.pk %}">{{ group.name}}</a></h3>
                                                 <div class="meta">
                                                     <div class="organizers">
                                                         <a href="{% url 'profile' pk=user.pk %}">{{ group.teacher.first_name}} {{ group.teacher.last_name}}</a>

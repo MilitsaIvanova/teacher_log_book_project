@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-
 class DiaryUser(AbstractUser):
     email=models.EmailField(unique=True)
     first_name = models.CharField(max_length=30,blank=False,null=False)
@@ -18,31 +17,10 @@ class DiaryUser(AbstractUser):
 
 class TeachersSubject(models.Model):
     name = models.CharField(max_length=100,blank=True,null=True)
-    code = models.CharField(max_length=10, unique=True)
+    code = models.CharField(max_length=10)
     description = models.TextField()
     teacher=models.ForeignKey(to=DiaryUser,on_delete=models.CASCADE)
     def __str__(self):
         return self.name
-class Student(models.Model):
-    name = models.CharField(max_length=30)
-    email = models.EmailField()
-    contact_number = models.CharField(max_length=10, blank=True, null=True)
-    teacher=models.ForeignKey(to=DiaryUser,on_delete=models.CASCADE)
-    place=models.CharField(max_length=50,null=True,blank=True)
-    lesson_time=models.TimeField(null=True,blank=True)
-    more_information=models.TextField(max_length=500, blank=True,null=True)
-    subject=models.ForeignKey(to=TeachersSubject,on_delete=models.SET_NULL, null=True)
 
-    def __str__(self):
-        return self.name
-    def save(self,*args,**kwargs):
-        super().save(*args,**kwargs)
 
-class Group(models.Model):
-    name = models.CharField(max_length=100)
-    year = models.PositiveIntegerField()
-    teacher=models.ForeignKey(to=DiaryUser,on_delete=models.CASCADE)
-    students = models.ManyToManyField(Student, related_name="groups",blank=True)
-    place=models.CharField(max_length=50,null=True,blank=True)
-    lesson_time=models.TimeField(null=True,blank=True)
-    subject = models.ForeignKey(to=TeachersSubject, on_delete=models.SET_NULL,null=True)
