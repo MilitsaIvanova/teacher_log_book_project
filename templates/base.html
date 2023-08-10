@@ -81,6 +81,17 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    {% if user.is_staff or user.is_superuser %}
+                        <li>
+                            <!-----------admin button link--------->
+                            <a href="/admin" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="28" height="28">
+                                    <image href="/static/images/admin_logo.png" width="28" height="28"/>
+                                </svg>
+                                Admin
+                            </a>
+                        </li>
+                        {% endif %}
                         <li>
                             <!-----------home button link--------->
                             <a href="{% url 'index' %}" class="nav-link text-secondary">

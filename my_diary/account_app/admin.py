@@ -5,7 +5,7 @@ from my_diary.account_app.models import  TeachersSubject, DiaryUser
 class DiaryUserAdmin(admin.ModelAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     list_display = ['username','first_name','last_name','email']
-    list_filter = ['date_joined','last_login']
+    list_filter = ['date_joined','last_login','is_staff','is_superuser']
     search_fields = ['first_name','email']
     fieldsets = (
         ('Personal info',
