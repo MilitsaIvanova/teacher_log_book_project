@@ -67,18 +67,13 @@
     <div class="px-3 py-2 text-bg-dark border-bottom">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <!--------------logo link if the user is logged in------------->
-                {% if user.is_authenticated %}
+                <!--------------logo link ------------->
+
                     <a href="{% url 'index' %}"
                        class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
                         <img id='logo-img' src="/static/images/my_diary_logo.png" alt="logo"/>
                     </a>
-                {% else %}
-                    <!-- Display the logo as plain image if the user is not logged in -->
-                    <img class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
-                         id='logo-img' src="/static/images/my_diary_logo.png" alt="logo"/>
 
-                {% endif %}
                 {% if user.is_authenticated %}
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                     {% if user.is_staff or user.is_superuser %}
@@ -154,6 +149,13 @@
                     <div class="container d-flex flex-wrap justify-content-end">
                 {% else %}
                     <!-----------Log in and Sign up buttons----------->
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                            <a href="{% url 'about' %}" class="nav-link text-white circular-link">
+                               About My Diary
+                            </a>
+                        </li>
+                    </ul>
                     <div class="text-end">
 
                         <a href="{% url 'login' %}" class="btn btn-light text-dark me-2">Login</a>
@@ -168,6 +170,6 @@
 {% endblock %}
 
 <footer>
-    <p>@MyDiary - SoftUni Exam 2023.</p>
+    <p>@MyDiary - Militsa Ivanova - SoftUni Exam 2023.</p>
 </footer>
 </html>

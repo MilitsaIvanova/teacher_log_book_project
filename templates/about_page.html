@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    <hr>
+        <div class="introduction_container">
+        <h1 style="text-align: center; color: #444; margin-bottom: 10px">Hello!</h1>
+        <hr>
+
+        <h3 style="text-align: center; color: #666; margin-bottom: 20px; font-weight: normal">Welcome to MyDiary: The Teacher's Digital Assistant!</h3>
+        <hr>
+
+            <p style="line-height: 1.5;margin-bottom: 20px; text-align: center;margin-left: 50px;margin-right: 50px">In the bustling world of education, where every lesson counts and every student matters, MyDiary Academy
+            emerges as a beacon for educators everywhere. We understand the challenges you face, from scheduling classes
+            to remembering crucial events and monitoring each student's progress. That’s why MyDiary Academy was crafted
+                specifically for you, the modern-day teacher.</p>
+
+            <p style="line-height: 1.5;margin-bottom: 20px; text-align: center;margin-left: 50px;margin-right: 50px">Imagine a platform where every tool you need is at your fingertips. With our intuitive calendar system, gone
+            are the days of double-booked slots or forgotten events. Schedule lessons, set tasks, and even manage
+            detailed student profiles all in one place. The peace of mind knowing that everything is organized allows
+                you to focus on what you do best: teaching.<p>
+           <p class="closing-statement" style="line-height: 1.5;margin-bottom: 20px; text-align: center;margin-left: 50px;margin-right: 50px"> Embrace the future of education with MyDiary Academy. Dive in, explore, and rediscover the joy of teaching without the administrative hassle.</p>
+        </div>
+    <hr>
+        <h3 style="text-align: center; color: #444; margin-bottom: 10px">Get started:
+        <a class="btn btn-primary" style="background-color: cadetblue" href='{% url "register" %}'>Create your profile</a>
+        </h3>
+
+
+        <!-- Home page -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+
+
+{% endblock %}

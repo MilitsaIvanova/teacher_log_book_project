@@ -12,7 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from my_diary.event_app.views import event_counter
 
-
+def about_view(request):
+    return render(request, 'about_page.html')
 class UserRegisterView(views.CreateView):
     model = DiaryUser
     form_class=DiaryUserCreateForm
