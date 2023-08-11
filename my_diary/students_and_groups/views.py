@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -10,10 +11,10 @@ from my_diary.account_app.models import DiaryUser, TeachersSubject
 from my_diary.students_and_groups.forms import AddStudentForm, EditStudentForm, GroupCreateForm, EditGroupForm
 from my_diary.students_and_groups.models import Student, Group
 
-
+UserModel=get_user_model()
 class ClassDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'students and groups/my_classes.html'
-    model = DiaryUser
+    model = UserModel
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['students']=self.request.user.student_set.all()
@@ -22,7 +23,7 @@ class ClassDetails(LoginRequiredMixin,views.DetailView):
 
 class GroupDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'students and groups/groups.html'
-    model = DiaryUser
+    model = UserModel
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['groups']=self.request.user.group_set.all()

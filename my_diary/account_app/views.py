@@ -7,15 +7,18 @@ from my_diary.account_app.forms import DiaryUserCreateForm, LoginForm, ProfileEd
 
 from my_diary.account_app.models import DiaryUser, TeachersSubject
 from django.contrib.auth import views as auth_views
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from my_diary.event_app.views import event_counter
 
+UserModel=get_user_model()
+
 def about_view(request):
     return render(request, 'about_page.html')
 class UserRegisterView(views.CreateView):
-    model = DiaryUser
+    model = UserModel
     form_class=DiaryUserCreateForm
     template_name = 'profile/register-page.html'
     success_url = reverse_lazy('login')
@@ -40,7 +43,7 @@ def logout_confirm(request):
 class ProfileEditView(LoginRequiredMixin,views.UpdateView):
     login_url = 'login'
 
-    model = DiaryUser
+    model = UserModel
     form_class = ProfileEditForm
     template_name = 'profile/profile_edit.html'
 
@@ -57,7 +60,7 @@ class ProfileEditView(LoginRequiredMixin,views.UpdateView):
             context = self.get_context_data(form=form, error_message=error_message)
             return self.render_to_response(context)
 class UserDeleteView(LoginRequiredMixin,views.DeleteView):
-    model = DiaryUser
+    model = UserModel
     template_name = 'profile/delete_profile.html'
 
     def get_success_url(self):
@@ -78,7 +81,7 @@ def index(request):
 
 class ProfileDetails(LoginRequiredMixin,views.DetailView):
     template_name = 'profile/my_profile.html'
-    model = DiaryUser
+    model = UserModel
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)

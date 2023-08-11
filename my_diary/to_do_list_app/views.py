@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.http import request, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -8,7 +9,7 @@ from django.views.generic import CreateView, DetailView, DeleteView
 from my_diary.account_app.models import DiaryUser
 from my_diary.to_do_list_app import models
 
-
+UserModel=get_user_model()
 # Create your views here.
 class TaskCreateView(LoginRequiredMixin,CreateView):
     fields = ['title', 'description']
@@ -25,7 +26,7 @@ class TaskCreateView(LoginRequiredMixin,CreateView):
 
 class TaskList(LoginRequiredMixin,DetailView):
     template_name = 'dashboard.html'
-    model = DiaryUser
+    model = UserModel
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

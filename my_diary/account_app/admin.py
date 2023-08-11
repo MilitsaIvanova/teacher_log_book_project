@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from my_diary.account_app.models import  TeachersSubject, DiaryUser
 
-@admin.register(DiaryUser)
+UserModel=get_user_model()
+@admin.register(UserModel)
 class DiaryUserAdmin(admin.ModelAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     list_display = ['username','first_name','last_name','email']
