@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
 function toggleTaskCompletion(taskId) {
-    // Get CSRF token
+
     var csrftoken = getCookie('csrftoken');
 
-    // Make POST request with CSRF token included
+
     $.ajax({
         url: `/toggle_task_completion/${taskId}/`,
         type: 'POST',
@@ -31,7 +31,7 @@ function toggleTaskCompletion(taskId) {
     });
 }
 
-// Function to get the cookie value by name
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {

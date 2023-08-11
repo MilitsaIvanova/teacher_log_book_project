@@ -6,5 +6,5 @@ class AdminAccessMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/admin/') and not (request.user.is_staff or request.user.is_superuser):
-            return redirect('/restricted-access/')  # Redirect to a restricted access page
+            return redirect('/restricted-access/')
         return self.get_response(request)
